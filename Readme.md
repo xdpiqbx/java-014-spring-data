@@ -1,5 +1,13 @@
 # java-014-spring-data
 
+---
+
+[**ResponseEntity to Manipulate the HTTP Response**](https://www.baeldung.com/spring-response-entity)
+
+ResponseEntity represents the whole HTTP response: status code, headers, and body. As a result, we can use it to fully configure the HTTP response.
+
+---
+
 <img src="./imgs/003 Spring Data.svg" align="center" alt="Lesson schema"/>
 
 ## @Repository
