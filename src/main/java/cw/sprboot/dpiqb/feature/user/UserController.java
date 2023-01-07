@@ -3,6 +3,7 @@ package cw.sprboot.dpiqb.feature.user;
 import cw.sprboot.dpiqb.feature.user.dto.DeleteUserResponse;
 import cw.sprboot.dpiqb.feature.user.dto.SaveUserResponse;
 import cw.sprboot.dpiqb.feature.user.dto.UserDTO;
+import cw.sprboot.dpiqb.feature.user.dto.UserInfoDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,16 @@ public class UserController {
     userService.deleteById(email);
     return DeleteUserResponse.success();
   }
+  @DeleteMapping("/deleteAll")
+  public DeleteUserResponse deleteAll(@RequestBody List<String> emails){
+    // Якщо є хочаб один неіснуючий email - Error.userNotFound
+    boolean thereAreNonExistingEmails = emails == null || emails.stream().anyMatch(email -> !userService.exists(email));
+    if (thereAreNonExistingEmails) {
+      return DeleteUserResponse.failed(DeleteUserResponse.Error.userNotFound);
+    }
+    userService.deleteByIds(emails);
+    return DeleteUserResponse.success();
+  }
   @GetMapping("/search")
   public List<UserDTO> search(
     @RequestParam(name = "query", required = false) String query,
@@ -59,5 +70,10 @@ public class UserController {
   @GetMapping("/countOlderThan/{age}")
   public int countPeopleOlderThan(@PathVariable(name = "age") int age){
     return userService.countPeopleOlderThan(age);
+  }
+
+  @GetMapping("/info/{email}")
+  public UserInfoDTO getUserInfo(@PathVariable(name = "email") String email){
+    return userService.getUserInfoV2(email);
   }
 }

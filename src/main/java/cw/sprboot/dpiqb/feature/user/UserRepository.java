@@ -1,6 +1,7 @@
 package cw.sprboot.dpiqb.feature.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -31,4 +32,11 @@ public interface UserRepository extends JpaRepository<User, String> {
     nativeQuery = true,
     value = "SELECT count(*) FROM \"user\" WHERE birthday < :maxAge")
   int countPeopleOlderThan(@Param("maxAge")LocalDate maxBirthday);
+
+  @Modifying
+  @Query(
+      nativeQuery = true,
+      value = "DELETE FROM \"user\" WHERE email IN (:emails)"
+  )
+  void deleteAllByEmails(@Param("emails") List<String> emails);
 }
