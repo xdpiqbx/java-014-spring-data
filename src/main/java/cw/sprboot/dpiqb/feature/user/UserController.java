@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,5 +75,13 @@ public class UserController {
   @GetMapping("/info/{email}")
   public UserInfoDTO getUserInfo(@PathVariable(name = "email") String email){
     return userService.getUserInfoV2(email);
+  }
+
+  @GetMapping("/between")
+  public List<User> getUserBetween(
+        @RequestParam("start")LocalDate start,
+        @RequestParam("end")LocalDate end
+      ){
+    return userService.getUserBetween(start, end);
   }
 }

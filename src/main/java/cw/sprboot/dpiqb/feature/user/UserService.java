@@ -3,12 +3,17 @@ package cw.sprboot.dpiqb.feature.user;
 import cw.sprboot.dpiqb.feature.user.dto.UserDTO;
 import cw.sprboot.dpiqb.feature.user.dto.UserInfoDTO;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -206,4 +211,30 @@ public class UserService {
     private String address;
   }
   // ============================================================================ public UserInfoDTO getUserInfo - END
+  public List<User> getUserBetween(LocalDate start, LocalDate end){
+    return userRepository.findAll(
+        (root, cq, cb) -> cb.between(root.get("birthday"), start, end)
+    );
+  }
+
+//  public List<User> getUserBetween(LocalDate start, LocalDate end){
+//    return userRepository.findAll((root, cq, cb) -> cb.and(
+//        cb.greaterThanOrEqualTo(root.get("birthday"), start),
+//        cb.lessThanOrEqualTo(root.get("birthday"), end)
+//    ));
+//  }
+
+//  public List<User> getUserBetween(LocalDate start, LocalDate end){
+//    Specification<User> betweenSpec = new Specification<User>() {
+//      @Override
+//      public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+//        return criteriaBuilder.and(
+//            criteriaBuilder.greaterThanOrEqualTo(root.get("birthday"), start),
+//            criteriaBuilder.lessThanOrEqualTo(root.get("birthday"), end)
+//        );
+//      }
+//    };
+//
+//    return userRepository.findAll(betweenSpec);
+//  }
 }

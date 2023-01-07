@@ -1,6 +1,7 @@
 package cw.sprboot.dpiqb.feature.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
   @Query("from User u where lower(u.email) like lower(:query) or lower(u.fullName) like lower(:query)")
   List<User> search(@Param("query") String query);
 
